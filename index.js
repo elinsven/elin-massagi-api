@@ -19,7 +19,7 @@ app.get("/getBookings", async (req, res) => {
 app.get("/getBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const booking = await pool.query("SELECT * FROM bookings WHERE bookings.bookingId = $1", [
+        const booking = await pool.query("SELECT * FROM bookings WHERE 'bookingId' = $1", [
             id,
         ]);
         res.json(booking.rows[0]);
