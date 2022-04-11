@@ -16,13 +16,13 @@ app.get("/getBookings", async (req, res) => {
     }
 });
 
-app.get("/getBooking/:id", async (req, res) => {
+app.get("/getBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const todo = await pool.query("SELECT * FROM bookings WHERE 'bookingId' = $1", [
+        const booking = await pool.query("SELECT * FROM bookings WHERE 'bookingId' = $1", [
             id,
         ]);
-        res.json(todo.rows[0]);
+        res.json(booking.rows[0]);
         } catch (err) {
         console.error(err.message);
         }
