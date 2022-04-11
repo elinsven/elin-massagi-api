@@ -7,6 +7,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+//Get all bookings
 app.get("/getBookings", async (req, res) => {
     try {
         const allBookings = await pool.query("SELECT * FROM bookings");
@@ -16,6 +17,7 @@ app.get("/getBookings", async (req, res) => {
     }
 });
 
+//Get bookings by id
 app.get("/getBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -28,9 +30,10 @@ app.get("/getBookings/:id", async (req, res) => {
         }
 });
 
+//Create new booking
 app.post("/addBooking", async (req, res) => {
-    const { bodyPart } = req.body;
     try {
+        const { bodyPart } = req.body;
         const newBooking = await pool.query(
             "INSERT INTO bookings(bodypart) VALUES ($1) RETURNING *", 
             [bodyPart]
@@ -41,6 +44,32 @@ app.post("/addBooking", async (req, res) => {
         console.error(error.message)
     }
 });
+
+//Update booking
+app.put("/updateBooking/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { bodyPart } = req.body;
+        const updateBooking = await pool.query(
+            "UPDATE bookings SET bodypart = $1 WHERE bookingid = $2",
+            [bodyPart, id]
+        );
+        res.json("Todo was updated!");
+    } catch (error) {
+        console.error(error.message)
+    }
+});
+
+//Delete booking
+app.delete("/deleteBooking/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteBooking = await pool.query("DELETE FROM bookings WHERE bookingid = $1", [id]);
+        res.json("Bookings was deleted!");    
+    } catch (error) {
+        console.error(error.message);
+    }
+})
 
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
