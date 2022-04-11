@@ -16,8 +16,8 @@ app.get("/getBookings", async (req, res) => {
 });
 
 app.get("/getBooking/:id", async (req, res) => {
+    const { id } = req.params;
     try {
-        const { id } = req.params;
         const booking = await pool.query("SELECT * FROM bookings WHERE bookingId = $1", [id]);
 
         res.json(booking.row[0]);
@@ -27,8 +27,8 @@ app.get("/getBooking/:id", async (req, res) => {
 });
 
 app.post("/addBooking", async (req, res) => {
+    const { bodyPart } = req.body;
     try {
-        const { bodyPart } = req.body;
         const newBooking = await pool.query(
             "INSERT INTO bookings (bodyPart) VALUES ($1) RETURNING *", 
             [bodyPart]
