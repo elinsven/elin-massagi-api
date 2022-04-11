@@ -19,7 +19,7 @@ app.get("/getBookings", async (req, res) => {
 app.get("/getBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const booking = await pool.query("SELECT * FROM bookings WHERE 'bookingId' = $1", [
+        const booking = await pool.query("SELECT * FROM bookings WHERE bookingid = $1", [
             id,
         ]);
         res.json(booking.rows[0]);
@@ -32,7 +32,7 @@ app.post("/addBooking", async (req, res) => {
     const { bodyPart } = req.body;
     try {
         const newBooking = await pool.query(
-            "INSERT INTO bookings('bodyPart') VALUES ($1) RETURNING *", 
+            "INSERT INTO bookings(bodypart) VALUES ($1) RETURNING *", 
             [bodyPart]
         );
 
