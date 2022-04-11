@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./database");
-let port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-app.use(express.json(), cors());
+app.use(cors());
+app.use(express.json());
 
 app.get("/getBookings", async (req, res) => {
     try {
@@ -16,14 +17,15 @@ app.get("/getBookings", async (req, res) => {
 });
 
 app.get("/getBooking/:id", async (req, res) => {
-    const { id } = req.params;
     try {
-        const booking = await pool.query("SELECT * FROM bookings WHERE bookingId = $1", [id]);
-
-        res.json(booking.row[0]);
-    } catch (error) {
-        console.log(error.message);
-    }
+        const { id } = req.params;
+        const todo = await pool.query("SELECT * FROM bookings WHERE bookingId = $1", [
+            id,
+        ]);
+        res.json(todo.rows[0]);
+        } catch (err) {
+        console.error(err.message);
+        }
 });
 
 app.post("/addBooking", async (req, res) => {
