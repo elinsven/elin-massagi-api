@@ -32,10 +32,10 @@ app.get("/getBooking/:id", async (req, res) => {
 //Create new booking
 app.post("/addBooking", async (req, res) => {
     try {
-        const { bodyPart } = req.body;
+        const { bodyPart } = req.body.bodypart;
         const newBooking = await pool.query(
             "INSERT INTO bookings(bodypart) VALUES ($1)", 
-            ["knä"]
+            [bodyPart]
         );
 
         res.json(newBooking);
