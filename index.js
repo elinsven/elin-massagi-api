@@ -34,7 +34,7 @@ app.post("/addBooking", async (req, res) => {
     try {
         const { bodyPart } = req.body;
         const newBooking = await pool.query(
-            "INSERT INTO bookings(bodypart) VALUES ($1) RETURNING *", 
+            "INSERT INTO bookings(bodypart) VALUES ($1:list) RETURNING *", 
             [bodyPart]
         );
 
@@ -50,7 +50,7 @@ app.put("/updateBooking/:id", async (req, res) => {
         const { id } = req.params;
         const { bodyPart } = req.body;
         const updateBooking = await pool.query(
-            "UPDATE bookings SET bodypart = $1 WHERE bookingid = $2",
+            "UPDATE bookings SET bodypart = $1:list WHERE bookingid = $2",
             [bodyPart, id]
         );
         res.json("Booking was updated!");
