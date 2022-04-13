@@ -32,11 +32,13 @@ app.get("/getBooking/:id", async (req, res) => {
 //Create new booking
 app.post("/addBooking", async (req, res) => {
     try {
-        for (i in req.body.bodypart) {
-            let newBooking = await pool.query('INSERT INTO bookings(bodypart) values($1) returning *', [req.body.bodypart[i]]
-            )
-            res.json(newBooking);
-        }
+        const { bodyPart } = req.body;
+        const newBooking = await pool.query(
+            "INSERT INTO bookings(bodypart) VALUES ($1) RETURNING *", 
+            [bodyPart]
+        );
+
+        res.json(newBooking);
     } catch (error) {
         console.error(error.message)
     }
@@ -48,7 +50,7 @@ app.put("/updateBooking/:id", async (req, res) => {
         const { id } = req.params;
         const { bodyPart } = req.body;
         const updateBooking = await pool.query(
-            "UPDATE bookings SET bodypart = $1:list WHERE bookingid = $2",
+            "UPDATE bookings SET bodypart = $1 WHERE bookingid = $2",
             [bodyPart, id]
         );
         res.json("Booking was updated!");
