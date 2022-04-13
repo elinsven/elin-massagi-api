@@ -32,13 +32,11 @@ app.get("/getBooking/:id", async (req, res) => {
 //Create new booking
 app.post("/addBooking", async (req, res) => {
     try {
-        const { bodyPart } = req.body;
-        const newBooking = await pool.query(
-            "INSERT INTO bookings(bodypart) VALUES ($1:list) RETURNING *", 
-            [bodyPart]
-        );
-
-        res.json(newBooking);
+        for (i in req.body.bodypart) {
+            let newBooking = await pool.query('INSERT INTO bookings(bodypart) values($1) returning *', [req.body.bodypart[i]]
+            )
+            res.json(newBooking);
+        }
     } catch (error) {
         console.error(error.message)
     }
