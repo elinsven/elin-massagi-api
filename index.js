@@ -9,7 +9,6 @@ app.use(express.json(), cors());
 //Get all bookings
 app.get("/getBookings", async (req, res) => {
     try {
-        console.log(req.body);
         const allBookings = await pool.query("SELECT * FROM bookings");
         res.json(allBookings.rows);
     } catch (error) {
@@ -39,7 +38,7 @@ app.post("/addBooking", async (req, res) => {
             [bodyPart]
         );
 
-        res.json(newBooking);
+        res.json({requestBody: req.body});
     } catch (error) {
         console.error(error.message)
     }
