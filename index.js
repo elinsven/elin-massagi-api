@@ -4,8 +4,7 @@ const app = express();
 const pool = require("./database");
 const port = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
+app.use(express.json(), cors());
 
 //Get all bookings
 app.get("/getBookings", async (req, res) => {
@@ -18,7 +17,7 @@ app.get("/getBookings", async (req, res) => {
 });
 
 //Get booking by id
-app.get("/getBookings/:id", async (req, res) => {
+app.get("/getBooking/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const booking = await pool.query("SELECT * FROM bookings WHERE bookingid = $1", [
@@ -31,7 +30,7 @@ app.get("/getBookings/:id", async (req, res) => {
 });
 
 //Create new booking
-app.post("/addBookings", async (req, res) => {
+app.post("/addBooking", async (req, res) => {
     try {
         const { bodyPart } = req.body;
         const newBooking = await pool.query(
@@ -46,7 +45,7 @@ app.post("/addBookings", async (req, res) => {
 });
 
 //Update booking
-app.put("/updateBookings/:id", async (req, res) => {
+app.put("/updateBooking/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { bodyPart } = req.body;
@@ -61,7 +60,7 @@ app.put("/updateBookings/:id", async (req, res) => {
 });
 
 //Delete booking
-app.delete("/deleteBookings/:id", async (req, res) => {
+app.delete("/deleteBooking/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const deleteBooking = await pool.query("DELETE FROM bookings WHERE bookingid = $1", [id]);
