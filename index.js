@@ -17,7 +17,7 @@ app.get("/getBookings", async (req, res) => {
     }
 });
 
-//Get bookings by id
+//Get booking by id
 app.get("/getBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -31,7 +31,7 @@ app.get("/getBookings/:id", async (req, res) => {
 });
 
 //Create new booking
-app.post("/addBooking", async (req, res) => {
+app.post("/addBookings", async (req, res) => {
     try {
         const { bodyPart } = req.body;
         const newBooking = await pool.query(
@@ -46,7 +46,7 @@ app.post("/addBooking", async (req, res) => {
 });
 
 //Update booking
-app.put("/updateBooking/:id", async (req, res) => {
+app.put("/updateBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { bodyPart } = req.body;
@@ -54,18 +54,18 @@ app.put("/updateBooking/:id", async (req, res) => {
             "UPDATE bookings SET bodypart = $1 WHERE bookingid = $2",
             [bodyPart, id]
         );
-        res.json("Todo was updated!");
+        res.json("Booking was updated!");
     } catch (error) {
         console.error(error.message)
     }
 });
 
 //Delete booking
-app.delete("/deleteBooking/:id", async (req, res) => {
+app.delete("/deleteBookings/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const deleteBooking = await pool.query("DELETE FROM bookings WHERE bookingid = $1", [id]);
-        res.json("Bookings was deleted!");    
+        res.json("Booking was deleted!");    
     } catch (error) {
         console.error(error.message);
     }
