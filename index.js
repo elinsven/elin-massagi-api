@@ -4,7 +4,7 @@ const app = express();
 const pool = require("./database");
 const port = process.env.PORT || 3000;
 
-app.use(express.json(), cors());
+app.use(express.json());
 
 //Get all bookings
 app.get("/bookings", async (req, res) => {
