@@ -7,69 +7,73 @@ const port = process.env.PORT || 3000;
 app.use(express.json(), cors());
 
 //Get all bookings
-app.get("/getBookings", async (req, res) => {
-    try {
-        const allBookings = await pool.query("SELECT * FROM bookings");
-        res.json(allBookings.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
+app.get("/bookings", async (req, res) => {
+  try {
+    const allBookings = await pool.query("SELECT * FROM bookings");
+    res.json(allBookings.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //Get booking by id
-app.get("/getBooking/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const booking = await pool.query("SELECT * FROM bookings WHERE bookingid = $1", [
-            id,
-        ]);
-        res.json(booking.rows[0]);
-        } catch (err) {
-        console.error(err.message);
-        }
+app.get("/bookings/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await pool.query(
+      "SELECT * FROM bookings WHERE bookingid = $1",
+      [id]
+    );
+    res.json(booking.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 
 //Create new booking
-app.post("/addBooking", async (req, res) => {
-    try {
-        const { bodyPart } = req.body.bodypart;
-        const newBooking = await pool.query(
-            "INSERT INTO bookings(bodypart) VALUES ($1)", 
-            [bodyPart]
-        );
+app.post("/bookings", async (req, res) => {
+  try {
+    const { bodyPart, startTime, endTime } = req.body;
+    const newBooking = await pool.query(
+      "INSERT INTO bookings(bodypart, starttime, endtime) VALUES ($1, $2, $3)",
+      [bodyPart, startTime, endTime]
+    );
 
-        res.json({requestBody: req.body});
-    } catch (error) {
-        console.error(error.message)
-    }
+    res.json("New bookings added!");
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //Update booking
-app.put("/updateBooking/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { bodyPart } = req.body;
-        const updateBooking = await pool.query(
-            "UPDATE bookings SET bodypart = $1 WHERE bookingid = $2",
-            [bodyPart, id]
-        );
-        res.json("Booking was updated!");
-    } catch (error) {
-        console.error(error.message)
-    }
+app.put("/bookings/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { bodyPart, startTime, endTime } = req.body;
+    const updateBooking = await pool.query(
+      "UPDATE bookings SET bodypart = $1, starttime = $2, endtime = $3 WHERE bookingid = $4",
+      [bodyPart, startTime, endTime, id]
+    );
+    res.json("Booking was updated!");
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //Delete booking
-app.delete("/deleteBooking/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const deleteBooking = await pool.query("DELETE FROM bookings WHERE bookingid = $1", [id]);
-        res.json("Booking was deleted!");    
-    } catch (error) {
-        console.error(error.message);
-    }
-})
+app.delete("/bookings/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteBooking = await pool.query(
+      "DELETE FROM bookings WHERE bookingid = $1",
+      [id]
+    );
+    res.json("Booking was deleted!");
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
-})
+  console.log(`Server is listening on port ${port}`);
+});
