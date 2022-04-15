@@ -39,7 +39,7 @@ app.post("/bookings", async (req, res) => {
       [bodyPart, startTime, endTime]
     );
 
-    res.json(newBooking);
+    res.json(newBooking.rows);
   } catch (error) {
     console.error(error.message);
   }
