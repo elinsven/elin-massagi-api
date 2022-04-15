@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 //Get all bookings
 app.get("/bookings", async (req, res) => {
@@ -35,10 +35,10 @@ app.get("/bookings/:id", async (req, res) => {
 //Create new booking
 app.post("/bookings", async (req, res) => {
   try {
-    const { bodyPart, startTime, endTime } = req.body;
+    const { bodypart, starttime, endtime } = req.body;
     const newBooking = await pool.query(
       "INSERT INTO bookings(bodypart, starttime, endtime) VALUES ($1, $2, $3) RETURNING *",
-      [bodyPart, startTime, endTime]
+      [bodypart, starttime, endtime]
     );
 
     res.json(newBooking.rows);
@@ -51,10 +51,10 @@ app.post("/bookings", async (req, res) => {
 app.put("/bookings/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { bodyPart, startTime, endTime } = req.body;
+    const { bodypart, starttime, endtime } = req.body;
     const updateBooking = await pool.query(
       "UPDATE bookings SET bodypart = $1, starttime = $2, endtime = $3 WHERE bookingid = $4",
-      [bodyPart, startTime, endTime, id]
+      [bodypart, starttime, endtime, id]
     );
     res.json("Booking was updated!");
   } catch (error) {
