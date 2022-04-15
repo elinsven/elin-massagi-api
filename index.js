@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./database");
+let bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(bodyParser.json(), cors());
 
 //Get all bookings
 app.get("/bookings", async (req, res) => {
