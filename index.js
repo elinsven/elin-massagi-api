@@ -37,7 +37,7 @@ app.post("/bookings", async (req, res) => {
   try {
     const { bodyPart, startTime, endTime } = req.body;
     const newBooking = await pool.query(
-      "INSERT INTO bookings(bodypart, starttime, endtime) VALUES ($1, $2, $3)",
+      "INSERT INTO bookings(bodypart, starttime, endtime) VALUES ($1, $2, $3) RETURNING *",
       [bodyPart, startTime, endTime]
     );
 
