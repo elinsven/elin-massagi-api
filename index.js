@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./database");
+const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000;
 
-app.use(express.json(), cors(), express.urlencoded({extended:true}));
+app.use(express.json(), cors());
 
 //Get all bookings
 app.get("/bookings", async (req, res) => {
@@ -31,7 +32,7 @@ app.get("/bookings/:id", async (req, res) => {
 });
 
 //Create new booking
-app.post("/bookings", async (req, res) => {
+app.post("/bookings", bodyParser, async (req, res) => {
   try {
     const { bodyPart, startTime, endTime } = req.body;
     const newBooking = await pool.query(
